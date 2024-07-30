@@ -1,7 +1,8 @@
+require("dotenv").config();
 const axios = require("axios");
 
 const GITHUB_USERNAME = "Oluwaseg";
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = process.env.TOKEN;
 
 const getReposUrl = `https://api.github.com/user/repos?per_page=100`;
 const headers = {
@@ -14,7 +15,7 @@ axios
   .then((response) => {
     const repos = response.data;
     repos.forEach((repo) => {
-      if (!repo.private) {
+      if (repo.private) {
         const updateUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${repo.name}`;
         axios
           .patch(updateUrl, { private: true }, { headers })
